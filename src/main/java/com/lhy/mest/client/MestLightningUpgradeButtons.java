@@ -5,8 +5,8 @@ import net.minecraft.world.item.ItemStack;
 import appeng.api.upgrades.IUpgradeInventory;
 
 import com.lhy.mest.client.dock.PanelSideBar;
-import com.moakiee.ae2lt.client.FrequencyBindingClient;
-import com.moakiee.ae2lt.client.TextureToggleButton;
+import com.moakiee.ae2lt.client.frequency.FrequencyBindingClient;
+import com.moakiee.ae2lt.client.widgets.TextureToggleButton;
 import com.moakiee.ae2lt.item.OverloadedFrequencyCardItem;
 
 final class MestLightningUpgradeButtons {
