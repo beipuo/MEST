@@ -182,6 +182,17 @@ public final class MestWtlibSupport {
                 && (expectedGrid == null || grid == expectedGrid);
     }
 
+    /** The live grid of the carried spliced terminal, or null when the terminal is unlinked. */
+    @Nullable
+    public static IGrid mestGrid(Player player) {
+        WTMenuHost host = linkedHost(player);
+        if (host == null) {
+            return null;
+        }
+        IGridNode node = host.getActionableNode();
+        return node == null ? null : node.getGrid();
+    }
+
     @Nullable
     private static MEStorage mestStorage(Player player) {
         WTMenuHost host = linkedHost(player);
