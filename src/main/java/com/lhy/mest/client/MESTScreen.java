@@ -260,6 +260,7 @@ public class MESTScreen extends AEBaseScreen<MESTMenu> implements IUniversalTerm
         if (trashPanel != null && dock.isEffectivelyVisible(trashPanel)) {
             dock.hideModule(trashPanel);
         }
+        syncTrashOpen();
     }
 
     public void dismissWirelessSettings() {
@@ -294,6 +295,22 @@ public class MESTScreen extends AEBaseScreen<MESTMenu> implements IUniversalTerm
         dock.hideModule(panel);
         if (panel == toolkitPanel) {
             syncToolkitOpen();
+        }
+    }
+
+    /**
+     * Mirrors {@link #syncToolkitOpen()}: the server only voids shift-clicked key types while
+     * {@code trashOpen} is set, so every path that hides the trash module must clear it. Otherwise a
+     * panel hidden by the layout, a combined-module toggle or a preset switch keeps accepting items
+     * into an invisible trash.
+     */
+    private void syncTrashOpen() {
+        if (trashPanel == null) {
+            return;
+        }
+        boolean open = dock.isEffectivelyVisible(trashPanel);
+        if (getMenu().isTrashOpen() != open) {
+            getMenu().setTrashOpen(open);
         }
     }
 
@@ -452,6 +469,7 @@ public class MESTScreen extends AEBaseScreen<MESTMenu> implements IUniversalTerm
         if (trashPanel != null && dock.isEffectivelyVisible(trashPanel) && !getMenu().isTrashOpen()) {
             getMenu().openTrashMenu();
         }
+        syncTrashOpen();
         dock.relayoutAllSlots();
         if (patternAccessPanel != null) {
             patternAccessPanel.rebindSearchField(this);
@@ -527,6 +545,7 @@ public class MESTScreen extends AEBaseScreen<MESTMenu> implements IUniversalTerm
             wirelessSettingsPanel.reloadFromStack();
         }
         syncToolkitOpen();
+        syncTrashOpen();
         if (patternAccessPanel != null && dock.isEffectivelyVisible(patternAccessPanel)) {
             patternAccessPanel.tick();
         }
@@ -1545,6 +1564,7 @@ public class MESTScreen extends AEBaseScreen<MESTMenu> implements IUniversalTerm
         attachMeSideBar();
         attachExtraSlotColumns();
         syncToolkitOpen();
+        syncTrashOpen();
     }
 
     private void toggleModule(ModulePanel panel) {
@@ -1562,6 +1582,7 @@ public class MESTScreen extends AEBaseScreen<MESTMenu> implements IUniversalTerm
         attachMeSideBar();
         attachExtraSlotColumns();
         syncToolkitOpen();
+        syncTrashOpen();
     }
 
     private static Component moduleToggleMessage(ModulePanel panel, boolean visible) {

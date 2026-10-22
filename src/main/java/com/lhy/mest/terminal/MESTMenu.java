@@ -99,6 +99,7 @@ public class MESTMenu extends CraftingTermMenu {
     private static final String ACTION_MAGNET_MENU = "magnetMenu";
     private static final String ACTION_TRASH_MENU = "trash";
     private static final String ACTION_CLOSE_TRASH = "closeTrash";
+    private static final String ACTION_SET_TRASH_OPEN = "mestSetTrashOpen";
     private static final String ACTION_SET_TOOLKIT_OPEN = "mestSetToolkitOpen";
     private static final String ACTION_SET_USELESS_PATTERN = "mestSetUselessPattern";
 
@@ -199,6 +200,7 @@ public class MESTMenu extends CraftingTermMenu {
         registerClientAction(ACTION_MAGNET_MENU, this::openMagnetMenu);
         registerClientAction(ACTION_TRASH_MENU, this::openTrashMenu);
         registerClientAction(ACTION_CLOSE_TRASH, this::closeTrash);
+        registerClientAction(ACTION_SET_TRASH_OPEN, Boolean.class, this::setTrashOpen);
         registerClientAction(ACTION_SET_TOOLKIT_OPEN, Boolean.class, this::setToolkitOpen);
         registerClientAction(ACTION_SET_USELESS_PATTERN, String.class, this::setUselessPattern);
 
@@ -277,6 +279,20 @@ public class MESTMenu extends CraftingTermMenu {
 
     public boolean isTrashOpen() {
         return trashOpen;
+    }
+
+    /**
+     * Enables or disables trash acceptance without clearing the stored contents. The trash module can
+     * be hidden by the layout, a combined-module toggle or a preset switch, none of which are the
+     * player asking to discard the trash. Only {@link #closeTrash()} voids the inventory.
+     */
+    public void setTrashOpen(boolean open) {
+        if (isClientSide()) {
+            sendClientAction(ACTION_SET_TRASH_OPEN, open);
+            trashOpen = open;
+            return;
+        }
+        trashOpen = open;
     }
 
     public void setToolkitOpen(boolean open) {
